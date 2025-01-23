@@ -17,5 +17,7 @@ The Southeastern United States rivers meander classification based on geometric 
 - Tukey’s HSD post-hoc comparisons
 # Results
 Our statistical analyses revealed significant differences in geometric properties among meander classes and across physiographic regions (Coastal Plain, Piedmont, Appalachian Plateau). Among the machine learning models, the Random Forest model demonstrated the highest classification accuracy at 96%, outperforming the Decision Tree (95%), Neural Network (77%), and Gradient Boosting Machine (67%).
+# Acknowledgments
+The source code is hosted on GitHub at https://github.com/thapawan/MeanderClassification. Moreover, GEE apps are hosted here: https://meanderclassify.users.earthengine.app/view/slopecurvature. The centerline and water-surface width estimated from MAT are shared in the Google Earth Engine Apps: https://meanderclassify.users.earthengine.app/view/matcw.
 # Contact
 Open for collaboration and welcome any valuable feedback or suggestions for improvement. If you have any queries about the algorithm, open for discussion and contact: pthapa2@crimson.ua.edu.
