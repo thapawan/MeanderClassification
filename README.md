@@ -1,5 +1,5 @@
 # Overview
-The Southeastern United States rivers meander classification based on geometric properties such as sinuosity, wavelength, length, amplitude, width and Quantity Width Based Meanders (QWBM).This study investigates the influence of geometric properties and physiographic regions on river meander classification in the southeastern United States. We employed four machine learning models—Gradient Boosting Machine, Neural Network, Decision Tree, and Random Forest—to classify meanders based on their amplitude, wavelength, sinuosity, water-surface width, and Quantitative Width-Based Meander (QWBM).
+The Southeastern United States rivers meander classification based on geometric properties such as sinuosity, wavelength, length, amplitude, width and Normalized Meander Curvature Index (NMCI).This study investigates the influence of geometric properties and physiographic regions on river meander classification in the southeastern United States. We employed four machine learning models—Gradient Boosting Machine, Neural Network, Decision Tree, and Random Forest—to classify meanders based on their amplitude, wavelength, sinuosity, water-surface width, and Normalized Meander Curvature Index (NMCI).
 # Machine Learning Models
 - Gradient Boosting Machine
 - Neural Network
