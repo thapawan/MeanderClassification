@@ -16,7 +16,7 @@ The Southeastern United States rivers meander classification based on geometric 
 - Kruskal-Wallis tests
 - Tukey’s HSD post-hoc comparisons
 # Results
-Our statistical analyses revealed significant differences in geometric properties among meander classes and across physiographic regions (Coastal Plain, Piedmont, Appalachian Plateau). Among the machine learning models, the Random Forest model demonstrated the highest classification accuracy at 85%, outperforming the Decision Tree (82%), Neural Network (77%), and Gradient Boosting Machine (67%).
+Our statistical analyses revealed significant differences in geometric properties among meander classes and across physiographic regions (Coastal Plain, Piedmont, Appalachian Plateau). Among the machine learning models, the Random Forest model demonstrated the highest classification accuracy at 85%, outperforming the Decision Tree (82%), Neural Network (77%), and Gradient Boosting Machine (67%). Zenode:https://zenodo.org/records/15730646?preview=1
 # Acknowledgments
 The source code is hosted on GitHub at https://github.com/thapawan/MeanderClassification. Moreover, GEE apps are hosted here: https://meanderclassify.users.earthengine.app/view/slopecurvature. The centerline and water-surface width estimated from MAT are shared in the Google Earth Engine Apps: https://meanderclassify.users.earthengine.app/view/matcw.
 # Contact
