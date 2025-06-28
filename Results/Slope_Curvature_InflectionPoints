@@ -1,0 +1,115 @@
+# Install the Earth Engine API
+!pip install earthengine-api
+# Authenticate and initialize the Earth Engine API
+import ee
+ee.Authenticate()
+ee.Initialize(project='ee-pawanthapa42')
+
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+
+# Define southeastern U.S. ROI
+states = ee.FeatureCollection('TIGER/2018/States').filter(ee.Filter.inList('NAME', [
+    'Alabama', 'Georgia', 'Florida', 'South Carolina',
+    'Mississippi', 'Tennessee', 'North Carolina'
+]))
+roi = states.geometry()
+
+# JRC Global Surface Water dataset filtered for southeast U.S.
+jrc = ee.Image("JRC/GSW1_4/GlobalSurfaceWater").select('occurrence')
+waterMask = jrc.gt(0).clip(roi)  # Filter for areas with water occurrence > 0
+
+# Load and clip SRTM 30m DEM for ROI
+demSRTM = ee.Image('USGS/SRTMGL1_003').clip(roi).rename('DEM')
+
+# Apply a Gaussian smoothing filter
+gaussianFilter = ee.Kernel.gaussian(radius=3, sigma=2, units='pixels', normalize=True)
+smoothedDEM = demSRTM.convolve(gaussianFilter).resample("bilinear")
+
+# Apply water mask to DEM
+waterDEM = smoothedDEM.updateMask(waterMask)
+
+# Terrain analysis using TAGEE library on water-only DEM
+def terrain_analysis(dem):
+    slope = ee.Terrain.slope(dem)
+    # Calculate mean curvature manually
+    dx = dem.gradient().select('x')
+    dy = dem.gradient().select('y')
+    dxx = dx.gradient().select('x')
+    dyy = dy.gradient().select('y')
+    mean_curvature = dxx.add(dyy).divide(2)
+    return slope, mean_curvature
+
+slopeDegrees, meanCurvature = terrain_analysis(waterDEM)
+
+# Convert slope from degrees to meters
+slopeMeters = slopeDegrees.expression('tan(slope * 3.14159265 / 180) * 30', {
+    'slope': slopeDegrees
+}).rename('Slope_m')
+
+# Inflection point detection from Mean Curvature
+meanCurvatureShiftX = meanCurvature.convolve(ee.Kernel.fixed(3, 3, [
+    [0, 0, 0],
+    [-1, 0, 1],
+    [0, 0, 0]
+]))
+meanCurvatureShiftY = meanCurvature.convolve(ee.Kernel.fixed(3, 3, [
+    [0, -1, 0],
+    [0, 0, 0],
+    [0, 1, 0]
+]))
+inflectionPointsX = meanCurvature.multiply(meanCurvatureShiftX).lt(0)
+inflectionPointsY = meanCurvature.multiply(meanCurvatureShiftY).lt(0)
+inflectionPoints = inflectionPointsX.And(inflectionPointsY).updateMask(waterMask)
+
+# Convert inflection points to vector polygons for water areas
+inflectionFeatures = inflectionPoints.reduceToVectors(
+    geometryType='centroid',
+    scale=200,
+    maxPixels=1e8,
+    bestEffort=True
+)
+
+# Create a Feature Collection with inflection points data
+def extract_inflection_data(feature):
+    centroid = feature.geometry().centroid()
+    slope = slopeMeters.reduceRegion(
+        reducer=ee.Reducer.first(),
+        geometry=centroid,
+        scale=30,
+        maxPixels=1e8
+    ).get('Slope_m')
+    curvature = meanCurvature.reduceRegion(
+        reducer=ee.Reducer.first(),
+        geometry=centroid,
+        scale=30,
+        maxPixels=1e8
+    ).get('mean_curvature')
+    return feature.set({
+        'latitude': centroid.coordinates().get(1),
+        'longitude': centroid.coordinates().get(0),
+        'slope_m': slope,
+        'curvature_1_m': curvature,
+        'inflection_point': True
+    })
+
+inflectionData = inflectionFeatures.map(extract_inflection_data)
+
+# Export to CSV
+task = ee.batch.Export.table.toDrive(
+    collection=inflectionData,
+    description='InflectionPointsData',
+    fileNamePrefix='InflectionPointsData',
+    folder='EarthEngineExports',  # Specify the folder name
+    fileFormat='CSV'
+)
+task.start()
+
+# Check the status of the export task
+import time
+while task.active():
+    print('Polling for task (id: {}).'.format(task.id))
+    time.sleep(10)
+
+print('Export task completed.')
