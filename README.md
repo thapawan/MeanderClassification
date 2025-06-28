@@ -21,3 +21,7 @@ Our statistical analyses revealed significant differences in geometric propertie
 The source code is hosted on GitHub at https://github.com/thapawan/MeanderClassification. Moreover, GEE apps are hosted here: https://meanderclassify.users.earthengine.app/view/slopecurvature. The centerline and water-surface width estimated from MAT are shared in the Google Earth Engine Apps: https://meanderclassify.users.earthengine.app/view/matcw.
 # Contact
 Open for collaboration and welcome any valuable feedback or suggestions for improvement. If you have any queries about the algorithm, open for discussion and contact: pthapa2@crimson.ua.edu.
+# Citation
+Thapa P., Davis L., Amanambu A. (2025) Geospatial Classification of River Meanders: A Machine Learning Framework Driven by Deep Learning and Geometric Properties.
+# Shared Dataset
+https://zenodo.org/records/15730646
