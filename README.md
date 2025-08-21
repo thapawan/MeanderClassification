@@ -22,6 +22,6 @@ The source code is hosted on GitHub at https://github.com/thapawan/MeanderClassi
 # Contact
 Open for collaboration and welcome any valuable feedback or suggestions for improvement. If you have any queries about the algorithm, open for discussion and contact: pthapa2@crimson.ua.edu.
 # Citation
-Thapa P., Davis L., Amanambu A. (2025) Geospatial Classification of River Meanders: A Machine Learning Framework Driven by Deep Learning and Geometric Properties.
+Thapa P. (2025) Geospatial Classification of River Meanders: A Machine Learning Framework Driven by Deep Learning and Geometric Properties.
 # Shared Dataset
 https://zenodo.org/records/15730646
